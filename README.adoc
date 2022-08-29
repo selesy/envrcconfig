@@ -1,0 +1,26 @@
+== envrcconfig
+
+`envrcconfig` is a generator that's intended to be a companion to the
+`envconfig` library in support of the `direnv` program.  Since the `direnv`
+library uses `.envrc` files by default, the project's name is a portmanto
+of these two words.
+
+=== Features
+
+Tenet three of the states that applications should "Store config in the
+environment".  The `envconfig` library is a great way for Go applications
+to build a configuration in the form of a "spec" struct.  There are many
+common ways to to actually build the environment for the applications -
+this project generates sample files in support of those formats.  The
+following formats are supported:
+
+- [ ] `.env` files (used by Docker Compose and others)
+- [ ] `.envrc` files (used by `direnv`)
+- [ ] Terraform HCL to configure AWS SSM
+- [ ] Kubernetes manifests for `ConfigMap` and `Secret`
+
+=== References
+
+- https://github.com/kelseyhightower/envconfig
+- https://pkg.go.dev/github.com/kelseyhightower/envconfig
+- https://direnv.net/
