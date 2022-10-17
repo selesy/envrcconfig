@@ -3,6 +3,7 @@ package generator
 import (
 	"errors"
 	"flag"
+	"sort"
 	"strings"
 )
 
@@ -65,6 +66,8 @@ func (f Formats) String() string {
 	for fmt := range f {
 		str = append(str, fmt.String())
 	}
+
+	sort.StringSlice(str).Sort()
 
 	return strings.Join(str, ", ")
 }
