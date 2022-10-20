@@ -7,6 +7,8 @@ import (
 	"strings"
 )
 
+// Format provides an enumeration listing the various output formats that
+// envrcconfig can generate.
 type Format int
 
 const (
@@ -16,8 +18,12 @@ const (
 	Terraform
 )
 
+// ErrUnsupportedOutputFormat is returned while building a configuration if
+// the user creates a format flag that is unknown.
 var ErrUnsupportedOutputFormat = errors.New("unsupported output format")
 
+// ParseFormat attempts to match strings passed via the format flag to valid
+// values of the enumeration.
 func ParseFormat(v string) (Format, error) {
 	fmt, ok := map[string]Format{
 		"direnv":     DirEnv,
@@ -33,6 +39,8 @@ func ParseFormat(v string) (Format, error) {
 	return fmt, nil
 }
 
+// String returns the textual value associated with the enumeration's
+// ordinal value.
 func (f Format) String() string {
 	if f < 0 || f > Terraform {
 		return ""
@@ -46,6 +54,9 @@ func (f Format) String() string {
 	}[int(f)]
 }
 
+// Formats is a simple type to adapt a comma-separated list of format
+// values, which may contain duplicates, into a set of unique valid
+// Format values.
 type Formats map[Format]struct{}
 
 func (f Formats) Set(v string) error {
@@ -60,6 +71,8 @@ func (f Formats) Set(v string) error {
 	return nil
 }
 
+// String returns an ascending, sorted list of the formats that were
+// passed on the command line.
 func (f Formats) String() string {
 	str := []string{}
 
@@ -72,6 +85,9 @@ func (f Formats) String() string {
 	return strings.Join(str, ", ")
 }
 
+// Config contains the parsed configuration passed to the application
+// via the command line.  After parsing CLI arguments, this type is
+// effectively immuntable.
 type Config struct {
 	formats  Formats
 	help     bool
@@ -80,26 +96,35 @@ type Config struct {
 	version  bool
 }
 
+// Formats returns the value of the configuration's formats field.
 func (c *Config) Formats() Formats {
 	return c.formats
 }
 
+// Help returns the value of the configuration's help field.
 func (c *Config) Help() bool {
 	return c.help
 }
 
+// LogLevel returns the value of the configuration's logLevel field.
 func (c *Config) LogLevel() string {
 	return c.logLevel
 }
 
+// Targets returns the value of the configuration's targets field which
+// contains the name of each envconfig annotated type in the form
+// <package>,<name>.
 func (c *Config) Targets() []string {
 	return c.targets
 }
 
+// Version returns the value of the configuration's version field.
 func (c *Config) Version() bool {
 	return c.version
 }
 
+// NewConfig parse the command line's args and attempts to build a valid
+// Config.
 func NewConfig(args []string) (*Config, error) {
 	cfg := &Config{}
 
